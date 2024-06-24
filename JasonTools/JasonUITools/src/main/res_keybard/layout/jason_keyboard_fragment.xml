@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:background="@drawable/jason_keyboard_radio_6_ffffff"
+            android:gravity="center"
+            android:paddingHorizontal="10dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="3dp">
+
+                <EditText
+                    android:id="@+id/tvInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:background="#F4f4f4"
+                    android:letterSpacing="0.1"
+                    android:maxLines="1"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    tools:text="123123123123" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!--数字键盘-->
+        <LinearLayout
+            android:id="@+id/llDigitKeyboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/jason_keyboard_radio_6_dcdfe6"
+            android:orientation="vertical"
+            android:paddingBottom="12dp">
+
+            <LinearLayout style="@style/json_keyboard_layout_style">
+
+                <TextView
+                    android:id="@+id/keyboard_1"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:layout_marginLeft="0dp"
+                    android:text="1" />
+
+                <TextView
+                    android:id="@+id/keyboard_2"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="2" />
+
+                <TextView
+                    android:id="@+id/keyboard_3"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="3" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/json_keyboard_layout_style">
+
+                <TextView
+                    android:id="@+id/keyboard_4"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:layout_marginLeft="0dp"
+                    android:text="4" />
+
+                <TextView
+                    android:id="@+id/keyboard_5"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="5" />
+
+                <TextView
+                    android:id="@+id/keyboard_6"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="6" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/json_keyboard_layout_style">
+
+                <TextView
+                    android:id="@+id/keyboard_7"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:layout_marginLeft="0dp"
+                    android:text="7" />
+
+                <TextView
+                    android:id="@+id/keyboard_8"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="8" />
+
+                <TextView
+                    android:id="@+id/keyboard_9"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="9" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/json_keyboard_layout_style">
+
+                <TextView
+                    android:id="@+id/keyboardToLetter"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:layout_marginLeft="0dp"
+                    android:text="ABC" />
+
+                <TextView
+                    android:id="@+id/keyboard_0"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="0" />
+
+                <TextView
+                    android:id="@+id/keyboard_point"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="." />
+
+                <TextView
+                    android:id="@+id/keyboard_delete"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="31dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/jason_keyboard_delete_button_selector" />
+
+                <TextView
+                    android:id="@+id/keyboard_confirm"
+                    android:layout_width="67dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/jason_keyboard_confirm_button_selector"
+                    android:gravity="center"
+                    android:text="确认"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--字母键盘-->
+        <LinearLayout
+            android:id="@+id/llLetterKeyboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/jason_keyboard_radio_6_dcdfe6"
+            android:orientation="vertical"
+            android:paddingBottom="12dp"
+            android:visibility="gone">
+
+            <LinearLayout style="@style/json_keyboard_layout_style">
+
+                <TextView
+                    android:id="@+id/keyboard_q"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:layout_marginLeft="0dp"
+                    android:text="q" />
+
+                <TextView
+                    android:id="@+id/keyboard_w"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="w" />
+
+                <TextView
+                    android:id="@+id/keyboard_e"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="e" />
+
+                <TextView
+                    android:id="@+id/keyboard_r"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="r" />
+
+                <TextView
+                    android:id="@+id/keyboard_t"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="t" />
+
+                <TextView
+                    android:id="@+id/keyboard_y"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="y"
+
+                    />
+
+                <TextView
+                    android:id="@+id/keyboard_u"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="u" />
+
+
+                <TextView
+                    android:id="@+id/keyboard_i"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="i" />
+
+                <TextView
+                    android:id="@+id/keyboard_o"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="o" />
+
+                <TextView
+                    android:id="@+id/keyboard_p"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="p" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/json_keyboard_layout_style">
+
+                <TextView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/keyboard_a"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="a" />
+
+                <TextView
+                    android:id="@+id/keyboard_s"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="s" />
+
+                <TextView
+                    android:id="@+id/keyboard_d"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="d" />
+
+                <TextView
+                    android:id="@+id/keyboard_f"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="f" />
+
+                <TextView
+                    android:id="@+id/keyboard_g"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="g" />
+
+                <TextView
+                    android:id="@+id/keyboard_h"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="h" />
+
+                <TextView
+                    android:id="@+id/keyboard_j"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="j" />
+
+                <TextView
+                    android:id="@+id/keyboard_k"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="k" />
+
+                <TextView
+                    android:id="@+id/keyboard_l"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="l" />
+
+                <TextView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/json_keyboard_layout_style">
+
+                <TextView
+                    android:id="@+id/keyboard_up"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/jason_keyboard_lowercase_button_selector" />
+
+                <TextView
+                    android:id="@+id/keyboard_z"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="z" />
+
+                <TextView
+                    android:id="@+id/keyboard_x"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="x" />
+
+                <TextView
+                    android:id="@+id/keyboard_c"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="c" />
+
+                <TextView
+                    android:id="@+id/keyboard_v"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="v" />
+
+                <TextView
+                    android:id="@+id/keyboard_b"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="b" />
+
+                <TextView
+                    android:id="@+id/keyboard_n"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="n" />
+
+                <TextView
+                    android:id="@+id/keyboard_m"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="m" />
+
+                <TextView
+                    android:id="@+id/keyboardDeleteLetter"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/jason_keyboard_delete_button_selector" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                style="@style/json_keyboard_layout_style">
+
+                <TextView
+                    android:id="@+id/keyboardLetterToSymbol"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/jason_keyboard_button_selector"
+                    android:gravity="center"
+                    android:text="符"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/keyboardToDigital"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/jason_keyboard_button_selector"
+                    android:gravity="center"
+                    android:text="123"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/keyboard_space"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="5"
+                    android:background="@drawable/jason_keyboard_button_selector"
+                    android:gravity="center"
+                    android:text="space"
+                    android:textAllCaps="false"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/keyboardLetter_point"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="." />
+
+                <TextView
+                    android:id="@+id/keyboardConfirmLetter"
+                    android:layout_width="67dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/jason_keyboard_confirm_button_selector"
+                    android:gravity="center"
+                    android:text="确认"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <!--符号键盘-->
+        <LinearLayout
+            android:id="@+id/llSymbolKeyboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/jason_keyboard_radio_6_dcdfe6"
+            android:orientation="vertical"
+            android:paddingBottom="12dp"
+            android:visibility="gone">
+
+            <LinearLayout
+
+                style="@style/json_keyboard_layout_style">
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_0"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:layout_marginLeft="0dp"
+                    android:text="!" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_1"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="\@" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_2"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="#" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_3"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="$" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_4"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="%" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_5"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="^" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_6"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="&#38;" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_7"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="*" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_8"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="(" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_9"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text=")" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                style="@style/json_keyboard_layout_style">
+
+                <TextView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_10"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="_" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_11"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="-" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_12"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="+" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_13"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="=" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_14"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="`" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_15"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="~" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_16"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="|" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_17"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="\\" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_18"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="/" />
+
+                <TextView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                style="@style/json_keyboard_layout_style">
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_19"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:layout_marginLeft="0dp"
+                    android:text="[" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_20"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="]" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_21"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="{" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_22"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="}" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_23"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="&#60;" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_24"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="&#62;" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_25"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="," />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_26"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:text="\?" />
+
+
+                <TextView
+                    android:id="@+id/keyboardDeleteSymbol"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/jason_keyboard_delete_button_selector" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                style="@style/json_keyboard_layout_style">
+
+                <TextView
+                    android:id="@+id/keyboardSymbolToLetter"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/jason_keyboard_button_selector"
+                    android:gravity="center"
+                    android:text="ABC"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbolToDigital"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/jason_keyboard_button_selector"
+                    android:gravity="center"
+                    android:text="123"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbolSpace"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="5"
+                    android:background="@drawable/jason_keyboard_button_selector"
+                    android:gravity="center"
+                    android:text="space"
+                    android:textAllCaps="false"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/keyboardSymbol_point"
+                    style="@style/jason_keyboard_letter_symbol_style"
+                    android:layout_weight="1"
+                    android:text="." />
+
+                <TextView
+                    android:id="@+id/keyboardConfirmSymbol"
+                    android:layout_width="67dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/jason_keyboard_confirm_button_selector"
+                    android:gravity="center"
+                    android:text="确认"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

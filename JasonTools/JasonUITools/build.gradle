@@ -1,0 +1,56 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace 'com.jason.jasonuitools'
+    compileSdk 30
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 30
+        versionCode 111
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    android.buildFeatures.viewBinding = true
+    sourceSets {
+        main {
+            res.srcDirs = [
+                    'src/main/res',
+                    'src/main/res_keybard',
+                    'src/main/res_view',
+            ]
+        }
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+
+}
+
+assemble.mustRunAfter clean
+// 自动生成aar包
+task makeAar(type: Copy) {
+    dependsOn clean, assemble
+    from('build/outputs/aar/')
+    into('build/libs/')
+    include('JasonUITools-release.aar')
+    rename('JasonUITools-release.aar', 'jasonUITools_' + "${android.defaultConfig.versionCode}" + '.aar')
+}
+
+

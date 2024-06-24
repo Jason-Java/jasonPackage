@@ -1,0 +1,59 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace 'com.jason.jasontools'
+    compileSdkVersion 30
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 111
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.18.1'
+        }
+    }
+}
+
+dependencies {
+     compileOnly 'io.netty:netty-all:4.1.45.Final'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+}
+assemble.mustRunAfter clean
+
+task makeJar(type: Copy) {
+    dependsOn clean, assemble
+    from('build/intermediates/aar_main_jar/release/')
+    into('build/libs/')
+    include('classes.jar')
+    rename('classes.jar', 'jasonTools_' + "${android.defaultConfig.versionCode}" + '.jar')
+}
+
+// 自动生成aar包
+task makeJasonToolAar(type: Copy) {
+    dependsOn clean, assemble
+    from('build/outputs/aar/')
+    into('build/libs/')
+    include('JasonTools-release.aar')
+    rename('JasonTools-release.aar', 'jasonTools_' + "${android.defaultConfig.versionCode}" + '.aar')
+}

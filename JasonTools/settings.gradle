@@ -1,0 +1,22 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "jasonPackage"
+include ':app'
+include ':JasonTools'
+include ':JasonUITools'
+include ':compile_processor'
+include ':compile_annotation'
+include ':compile_api'

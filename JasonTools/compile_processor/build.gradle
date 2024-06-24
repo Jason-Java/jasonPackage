@@ -1,0 +1,33 @@
+plugins {
+    id 'java-library'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    version= 101
+}
+dependencies {
+    annotationProcessor 'com.google.auto.service:auto-service:1.0-rc7'
+    compileOnly 'com.google.auto.service:auto-service-annotations:1.0-rc7'
+    compile 'com.squareup:javapoet:1.13.0'
+    implementation project(':compile_annotation')
+}
+
+task createJar(type: Jar) {
+    archiveBaseName.set('compileProcessor')
+    from sourceSets.main.output
+
+    // 如果有其他依赖库，也可以将它们包含进来
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    manifest {
+        attributes 'Implementation-Title': 'compile_processor',
+                'Implementation-Version': version
+    }
+}
+
+build.dependsOn createJar

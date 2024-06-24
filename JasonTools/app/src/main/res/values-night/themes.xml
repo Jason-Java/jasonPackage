@@ -1,0 +1,17 @@
+<resources >
+    <style name="Theme.JasonTools" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!--<color name="colorPrimaryDark">#3700B3</color>
+        <color name="colorAccent">#03DAC5</color>-->
+        <!-- Customize your theme here. -->
+    </style>
+</resources>
