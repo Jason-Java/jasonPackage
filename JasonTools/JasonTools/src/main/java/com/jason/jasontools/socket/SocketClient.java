@@ -45,8 +45,6 @@ public abstract class SocketClient {
      * ip地址
      */
     private String ipAddress;
-
-
     /**
      * IO线程池
      */
@@ -57,7 +55,6 @@ public abstract class SocketClient {
     private EventLoopGroup workEventLoopGroup;
     private Bootstrap bootstrap;
     private NioSocketChannel nioSocketChannel;
-
     /**
      * 串口 接口监听<br>
      * 同一个串口注册多个监听，串口接受的结果会发送给每一个监听者
@@ -66,7 +63,6 @@ public abstract class SocketClient {
 
     private IVerifySerialProtocolData verifySerialProtocolData = null;
     private IParseSerialProtocol parseSerialProtocolData = null;
-
 
     /**
      * 获取Ip地址
@@ -77,15 +73,45 @@ public abstract class SocketClient {
         return this.ipAddress;
     }
 
+    /**
+     * 连接超时时间 单位秒
+     */
+    private long linkTimeout;
+    /**
+     * 读取超时时间 单位秒
+     */
+    private long readTimeout;
 
-    public SocketClient() {
+
+    public void setLinkTimeout(long linkTimeout) {
+        this.linkTimeout = linkTimeout;
+    }
+
+    public void setReadTimeout(long readTimeout) {
+        this.readTimeout = readTimeout;
+    }
+
+    public void initSocketClient() {
+        initSocketClient(linkTimeout, readTimeout);
+    }
+
+    /**
+     * 初始化socket客户端
+     */
+    public void initSocketClient(long linkTimeout, long readTimeout) {
+        if (linkTimeout == 0) {
+            linkTimeout = 5;
+        }
+        if (readTimeout == 0) {
+            readTimeout = 3;
+        }
         try {
             eventLoopGroup = new NioEventLoopGroup();
             workEventLoopGroup = new DefaultEventLoop();
             bootstrap = new Bootstrap()
                     .group(eventLoopGroup)
                     // 连接超时500毫秒
-                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 500)
+                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5 * 1000)
                     .channel(NioSocketChannel.class)
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override

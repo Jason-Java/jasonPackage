@@ -9,7 +9,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 111
+        versionCode 113
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
 
@@ -35,7 +35,7 @@ android {
 }
 
 dependencies {
-     compileOnly 'io.netty:netty-all:4.1.45.Final'
+    compileOnly 'io.netty:netty-all:4.1.45.Final'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
 }

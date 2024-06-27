@@ -65,6 +65,14 @@ public abstract class AbsCommand {
         if (isStartCheckTimeOutThread()) {
             startCheckTimeoutThread();
         }
+        // 如果有重发机制，第一次发送命令的时候才调用 start()函数
+        if (getRepeater() && repeatCount == 0) {
+            messageListener.start();
+        }
+        // 如果没有重发机制，则调用start()
+        else {
+            messageListener.start();
+        }
         execute();
     }
 
@@ -79,6 +87,7 @@ public abstract class AbsCommand {
     private void startCheckTimeoutThread() {
         JasonThreadPool.getInstance().execute(this.checkTimeOutRunnable = new CheckTimeOutRunnable(this));
     }
+
     /**
      * 停止超时检查线程
      *
@@ -87,6 +96,7 @@ public abstract class AbsCommand {
     public void stopCheckTimeOutThread() {
         this.checkTimeOutRunnable.stopCheckTimeOutThread();
     }
+
     /**
      * 默认每个命令超时了都不需要重新发送
      * 如果想重发此命令可以重写此方法
@@ -154,11 +164,11 @@ public abstract class AbsCommand {
     }
 
 
-
     /**
      * 是否开启超时检查线程
      * 默认开启
      * 如果需要关闭超时检查线程,需要重写此方法
+     *
      * @return true 开启 false 不开启
      */
     protected boolean isStartCheckTimeOutThread() {
@@ -173,6 +183,7 @@ public abstract class AbsCommand {
     public RepeaterListener getRepeaterListener() {
         return repeaterListener;
     }
+
     public void setRepeaterListener(RepeaterListener repeaterListener) {
         this.repeaterListener = repeaterListener;
     }
@@ -185,6 +196,7 @@ public abstract class AbsCommand {
     public IMessageListener getMessageListener() {
         return messageListener;
     }
+
     public void setMessageListener(IMessageListener messageListener) {
         this.messageListener = messageListener;
     }

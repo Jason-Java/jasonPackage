@@ -1,5 +1,6 @@
 package com.jason.jasontools.usb;
 
+import android.graphics.Point;
 import android.hardware.usb.UsbConstants;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
@@ -9,6 +10,7 @@ import android.hardware.usb.UsbManager;
 import android.hardware.usb.UsbRequest;
 
 
+import com.jason.jasontools.util.ArrayUtil;
 import com.jason.jasontools.util.LogUtil;
 import com.jason.jasontools.util.StrUtil;
 

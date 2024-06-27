@@ -72,7 +72,7 @@ public class BytesToIProtocol extends ByteToMessageCodec<IProtocol> {
             if (protocol == null) return;
             ResultData resultData = null;
             if (this.parseSerialProtocol != null) {
-                resultData = this.parseSerialProtocol.parseData(protocol, protocol.getProtocolLength());
+                resultData = this.parseSerialProtocol.dispatchParse(protocol, protocol.getProtocolLength());
             } else {
                 resultData = new ResultData();
                 resultData.setProtocol(protocol);

@@ -25,7 +25,7 @@ public interface IVerifySerialProtocolData {
      * @param protocol 协议
      * @param len      协议数据长度
      * @return 如果校验成功则返回协议，如果返回null 代表数据不合法，但是不清除缓存
-     * @throws VerifyFailedException 校验失败异常 清除缓存
+     * @throws VerifyFailedException 校验失败异常
      */
     IProtocol verifyReceiveData(IProtocol protocol, int len) throws VerifyFailedException;
 }

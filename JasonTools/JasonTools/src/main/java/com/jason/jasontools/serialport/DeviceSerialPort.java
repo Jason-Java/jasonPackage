@@ -4,7 +4,7 @@ import com.jason.jasontools.commandbus.IProtocol;
 import com.jason.jasontools.util.LogUtil;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,12 +25,12 @@ public abstract class DeviceSerialPort {
      * 串口 接口监听<br>
      * 同一个串口注册多个监听，串口接受的结果会发送给每一个监听者
      */
-    private Map<String, IResultListener> listenerMap = new HashMap<>();
+    private IResultListener resultListener;
 
     private IVerifySerialProtocolData verifySerialProtocolData = null;
     private IParseSerialProtocol parseSerialProtocolData = null;
 
-    private ArrayList<Byte> cacheBytes = new ArrayList<>();
+//    private ArrayList<Byte> cacheBytes = new ArrayList<>();
 
     /**
      * 串口名称
@@ -46,7 +46,7 @@ public abstract class DeviceSerialPort {
     private int flags;
 
     /**
-     * 获取串口名称
+     * 设置串口名称
      *
      * @return
      */
@@ -55,7 +55,7 @@ public abstract class DeviceSerialPort {
     }
 
     /**
-     * 获取波特率
+     * 设置波特率
      *
      * @return
      */
@@ -63,6 +63,11 @@ public abstract class DeviceSerialPort {
         this.baudRate = baudRate;
     }
 
+    /**
+     * 设置标志位
+     *
+     * @param flags
+     */
     public void setFlags(int flags) {
         this.flags = flags;
     }
@@ -79,37 +84,24 @@ public abstract class DeviceSerialPort {
      * 打开串口接收器
      *
      * @param serialPortName 串口名称
-     * @param baudrate       波特率
+     * @param baudRate       波特率
      * @param flags          标志位
      */
-    public void open(String serialPortName, int baudrate, int flags) {
-        this.serialPortName = serialPortName;
-        this.baudRate = baudrate;
-        this.flags = flags;
+    public void open(String serialPortName, int baudRate, int flags) {
         if (serialPortName == null || serialPortName.length() == 0) {
-            throw new RuntimeException("为设置串口号");
+            throw new RuntimeException("未设置串口号");
         }
         if (baudRate == 0) {
             throw new RuntimeException("未设置波特率");
         }
         try {
-            this.serialPortUtil = new SerialPortUtil(serialPortName, baudrate, flags);
+            this.serialPortUtil = new SerialPortUtil(serialPortName, baudRate, flags);
             this.serialPortUtil.registerListener(initSerialProtocolListener());
         } catch (Exception e) {
             LogUtil.e(TAG, "open serialPort error " + e.getMessage());
         }
     }
 
-    /**
-     * 注册监听器
-     * 同一个串口可以有多个监听者
-     *
-     * @param tag      监听器标识唯一标识,如果已经存在则会覆盖
-     * @param listener
-     */
-    public void registerListener(String tag, IResultListener listener) {
-        listenerMap.put(tag, listener);
-    }
 
     /**
      * 注册监听器
@@ -118,29 +110,14 @@ public abstract class DeviceSerialPort {
      * @param listener 监听器
      */
     public void registerListener(IResultListener listener) {
-        registerListener(listener.getTAG(), listener);
+        this.resultListener = listener;
     }
 
     /**
      * 取消监听器
-     *
-     * @param tag 监听器标识唯一标识
      */
-    public void unregisterListener(String tag) {
-        listenerMap.remove(tag);
-    }
-
-    /**
-     * 取消监听器
-     *
-     * @param listener 监听器
-     */
-    public void unregisterListener(IResultListener listener) {
-        unregisterListener(listener.getTAG());
-    }
-
-    public void unregisterAllListener() {
-        listenerMap.clear();
+    public void unregisterListener() {
+        this.resultListener = null;
     }
 
     /**
@@ -161,15 +138,6 @@ public abstract class DeviceSerialPort {
         this.parseSerialProtocolData = parseSerialProtocolData;
     }
 
-    /**
-     * 发送数据
-     *
-     * @param protocol 协议
-     */
-    public void sendData(IProtocol protocol) {
-        sendData((IProtocol) protocol.clone(), null);
-    }
-
 
     /**
      * 发送数据<br/>
@@ -177,13 +145,9 @@ public abstract class DeviceSerialPort {
      * 则会调用{@link IVerifySerialProtocolData#verifySendData(IProtocol, int)} 的方法进行校验数据
      * 校验数据规则由用户自行决定
      *
-     * @param protocol    协议
-     * @param listenerTag 监听器标识唯一标识
+     * @param protocol 协议
      */
-    public void sendData(IProtocol protocol, String listenerTag) {
-        //清除缓存
-        cacheBytes.clear();
-        IResultListener iResultListener = listenerMap.get(listenerTag);
+    public void sendData(IProtocol protocol) {
         try {
             if (this.verifySerialProtocolData != null) {
                 protocol = verifySerialProtocolData.verifySendData(protocol, protocol.getProtocolLength());
@@ -191,17 +155,17 @@ public abstract class DeviceSerialPort {
             serialPortUtil.sendCmd(protocol);
         } catch (VerifyFailedException e) {
             LogUtil.e(TAG, "协议验证失败，详细错误：\"+e.getMessage()+\" 发送的协议：\" + protocol.getProtocolStr()");
-            if (iResultListener != null) {
-                iResultListener.error("协议验证失败，详细错误：" + e.getMessage() + " 发送的协议：" + protocol.getProtocolStr());
+            if (resultListener != null) {
+                resultListener.error("协议验证失败，详细错误：" + e.getMessage() + " 发送的协议：" + protocol.getProtocolStr());
             }
         } catch (IOException e) {
             LogUtil.e(TAG, "发送数据失败，IO流错误");
-            if (iResultListener != null)
-                iResultListener.error("发送数据失败，IO流错误");
+            if (resultListener != null)
+                resultListener.error("发送数据失败，IO流错误");
         } catch (NullPointerException e) {
             LogUtil.e(TAG, "串口未打开");
-            if (iResultListener != null)
-                iResultListener.error("串口未打开");
+            if (resultListener != null)
+                resultListener.error("串口未打开");
         }
     }
 
@@ -209,7 +173,7 @@ public abstract class DeviceSerialPort {
      * 销毁
      */
     public void onDestroy() {
-        unregisterAllListener();
+        unregisterListener();
         serialPortListener = null;
         if (serialPortUtil != null) {
             serialPortUtil.close();
@@ -226,41 +190,27 @@ public abstract class DeviceSerialPort {
         return serialPortListener = new ISerialPortListener() {
             @Override
             public void onResponseData(byte[] data, int length) {
-                // 存储缓存
-                for (int i = 0; i < length; i++) {
-                    cacheBytes.add(data[i]);
-                }
                 IProtocol protocol = new IProtocol();
-                protocol.setProtocol(cacheBytes);
+                protocol.setProtocol(Arrays.copyOf(data, length));
                 try {
-                    if (verifySerialProtocolData != null)
-                        //验证数据是否合法，合法
+                    //验证数据是否合法
+                    if (verifySerialProtocolData != null) {
                         protocol = verifySerialProtocolData.verifyReceiveData(protocol, protocol.getProtocolLength());
-                    if (protocol == null) return;
+                    }
+                    // 经过协议解析拦截器进行解析
                     ResultData resultData = null;
                     if (parseSerialProtocolData != null) {
-                        resultData = parseSerialProtocolData.parseData(protocol, protocol.getProtocolLength());
+                        resultData = parseSerialProtocolData.dispatchParse(protocol, protocol.getProtocolLength());
                     }
-                    for (IResultListener listener : listenerMap.values())
-                        if (resultData != null) {
-                            listener.onResult(resultData);
-                        }
-                    //清除缓存
-                    cacheBytes.clear();
+                    if (resultData != null && resultListener != null) {
+                        resultListener.onResult(resultData);
+                    }
                 } catch (VerifyFailedException e) {
                     LogUtil.e(TAG, "verifyData error " + e.getMessage());
-                    for (IResultListener li :
-                            listenerMap.values()) {
-                        li.error("协议验证失败，详细错误：" + e.getMessage() + "接收到的协议：" + protocol.getProtocolStr());
-                    }
-                    //清除缓存
-                    cacheBytes.clear();
+                    resultListener.error("协议验证失败，详细错误：" + e.getMessage() + "接收到的协议：" + protocol.getProtocolStr());
                 } catch (Exception e) {
                     LogUtil.e(TAG, "parseData error " + e.getMessage());
-                    for (IResultListener li :
-                            listenerMap.values()) {
-                        li.error("详细错误：" + e.getMessage() + "接收到的协议：" + protocol.getProtocolStr());
-                    }
+                    resultListener.error("详细错误：" + e.getMessage() + "接收到的协议：" + protocol.getProtocolStr());
                 }
             }
         };
