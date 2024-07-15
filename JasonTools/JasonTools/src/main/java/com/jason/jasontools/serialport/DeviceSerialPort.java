@@ -197,6 +197,9 @@ public abstract class DeviceSerialPort {
                     if (verifySerialProtocolData != null) {
                         protocol = verifySerialProtocolData.verifyReceiveData(protocol, protocol.getProtocolLength());
                     }
+                    if (protocol == null) {
+                        return;
+                    }
                     // 经过协议解析拦截器进行解析
                     ResultData resultData = null;
                     if (parseSerialProtocolData != null) {

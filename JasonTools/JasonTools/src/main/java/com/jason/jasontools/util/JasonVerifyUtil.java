@@ -50,5 +50,34 @@ public class JasonVerifyUtil {
         return bcc;
     }
 
+    /**
+     * CRC校验算法
+     *
+     * @param bytes
+     * @return
+     */
+  public static   byte[] crc16_Modbus(byte[] bytes) {
+        int CRC = 0x0000FFFF;
+        int POLYNOMIAL = 0x0000A001;
+
+        for (int i = 0; i < bytes.length; ++i) {
+            CRC ^= bytes[i] & 255;
+
+            for (int j = 0; j < 8; ++j) {
+                if ((CRC & 1) != 0) {
+                    CRC >>= 1;
+                    CRC ^= POLYNOMIAL;
+                } else {
+                    CRC >>= 1;
+                }
+            }
+        }
+        byte[] data = new byte[2];
+        // 获取第八位
+        data[0] = (byte) (CRC & 0x000000ff);
+        // 获取 高八位
+        data[1] = (byte) ((CRC & 0x0000ff00)>>8);
+        return data;
+    }
 
 }

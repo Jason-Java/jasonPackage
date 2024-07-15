@@ -57,15 +57,15 @@ public class JasonBaseView {
     private float strokeWidth = 0;
     protected int strokeColor;
 
-    public JasonBaseView(View view, Context context, AttributeSet attrs) {
+    public JasonBaseView(View view, Context context, AttributeSet set,int[] attrs) {
         this.view = view;
         this.context = context;
-        init(context, attrs);
+        init(context,set, attrs);
         onDraw();
     }
 
-    private void init(Context context, AttributeSet attrs) {
-        TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.JasonBaseView);
+    private void init(Context context, AttributeSet set,int[] attrs) {
+        TypedArray attr = context.obtainStyledAttributes(set, attrs);
         try {
             //圆角相关
             radius = attr.getDimension(R.styleable.JasonBaseView_ja_radius, 0);
@@ -75,7 +75,7 @@ public class JasonBaseView {
             rightBottomRadius = attr.getDimension(R.styleable.JasonBaseView_ja_rightBottomRadius, radius);
 
             background = attr.getDrawable(R.styleable.JasonBaseView_ja_background);
-            mBackground = background;
+            mBackground = background == null ? mBackground : background;
             pressBackground = attr.getDrawable(R.styleable.JasonBaseView_ja_pressBackground);
             selected = attr.getBoolean(R.styleable.JasonBaseView_ja_selected, false);
             selectedBackground = attr.getDrawable(R.styleable.JasonBaseView_ja_selectedBackground);

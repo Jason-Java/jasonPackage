@@ -43,26 +43,6 @@
     <attr name="ja_shadowColor" format="color" />
     <attr name="ja_background" format="reference|color" />
 
-    <declare-styleable name="JasonLearLayout">
-        <!--    圆角相关-->
-        <attr name="ja_radius" />
-        <attr name="ja_leftTopRadius" />
-        <attr name="ja_rightTopRadius" />
-        <attr name="ja_leftBottomRadius" />
-        <attr name="ja_rightBottomRadius" />
-        <!--        边框相关-->
-        <attr name="ja_strokeWidth" />
-        <attr name="ja_strokeLeftWidth" />
-        <attr name="ja_strokeRightWidth" />
-        <attr name="ja_strokeTopWidth" />
-        <attr name="ja_strokeBottomWidth" />
-        <attr name="ja_strokeColorPress" />
-        <attr name="ja_strokeColor" />
-        <!--        背景相关-->
-        <attr name="ja_bgColorPress" />
-        <attr name="ja_bgColor" />
-
-    </declare-styleable>
     <declare-styleable name="JasonButton">
         <!--        边框相关-->
         <attr name="ja_strokeWidth" />
@@ -232,6 +212,36 @@
         <!--        边框相关-->
         <attr name="ja_strokeWidth" />
         <attr name="ja_strokeColor" />
+
+    </declare-styleable>
+
+    <declare-styleable  name="JasonLinearLayout" >
+         <!--    圆角相关 圆角设置仅对纯色背景有效，如果背景是图片则无效-->
+         <attr name="ja_radius" />
+         <attr name="ja_leftTopRadius" />
+         <attr name="ja_rightTopRadius" />
+         <attr name="ja_leftBottomRadius" />
+         <attr name="ja_rightBottomRadius" />
+         <attr name="ja_background" />
+         <!--按压背景色-->
+         <attr name="ja_pressBackground" />
+         <!-- 是否可选-->
+         <attr name="ja_selected" />
+         <!--选中背景色-->
+         <attr name="ja_selectedBackground" />
+         <!--阴影半径-->
+         <attr name="ja_shadowRadius" />
+         <!--        阴影偏移量-->
+         <attr name="ja_shadowOffsetLeft" />
+         <attr name="ja_shadowOffsetRight" />
+         <attr name="ja_shadowOffsetTop" />
+         <attr name="ja_shadowOffsetBottom" />
+         <!--        阴影颜色-->
+         <attr name="ja_shadowColor" />
+
+         <!--        边框相关-->
+         <attr name="ja_strokeWidth" />
+         <attr name="ja_strokeColor" />
 
     </declare-styleable>
 </resources>

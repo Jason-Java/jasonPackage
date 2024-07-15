@@ -8,6 +8,7 @@ import com.jason.jasontools.serialport.VerifyFailedException;
 import com.jason.jasontools.util.LogUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
@@ -34,7 +35,6 @@ public class BytesToIProtocol extends ByteToMessageCodec<IProtocol> {
      * 处理返回协议
      */
     private IParseSerialProtocol parseSerialProtocol;
-    private ArrayList<Byte> cacheBytes = new ArrayList<>();
 
     public BytesToIProtocol(IVerifySerialProtocolData verifySerialProtocolData, IParseSerialProtocol parseSerialProtocol) {
         this.verifySerialProtocolData = verifySerialProtocolData;
@@ -44,8 +44,6 @@ public class BytesToIProtocol extends ByteToMessageCodec<IProtocol> {
     // 发送消息进行编码
     @Override
     protected void encode(ChannelHandlerContext ctx, IProtocol protocol, ByteBuf out) throws Exception {
-        // 在发送消息之前先清空缓存
-        cacheBytes.clear();
         try {
             if (this.verifySerialProtocolData != null) {
                 protocol = verifySerialProtocolData.verifySendData(protocol, protocol.getProtocolLength());
@@ -60,11 +58,16 @@ public class BytesToIProtocol extends ByteToMessageCodec<IProtocol> {
     // 接受消息进行解码
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+        int i = in.readableBytes();
+        byte[] bytes = new byte[i];
+        in.readBytes(bytes);
+/*
         while (in.isReadable()) {
             cacheBytes.add(in.readByte());
         }
+*/
         IProtocol protocol = new IProtocol();
-        protocol.setProtocol(cacheBytes);
+        protocol.setProtocol(bytes);
         try {
             if (verifySerialProtocolData != null)
                 //验证数据是否合法，合法
@@ -78,16 +81,12 @@ public class BytesToIProtocol extends ByteToMessageCodec<IProtocol> {
                 resultData.setProtocol(protocol);
             }
             out.add(resultData);
-            //清除缓存
-            cacheBytes.clear();
+
         } catch (VerifyFailedException e) {
             LogUtil.e(TAG, "verifyData error " + e.getMessage());
-            //清除缓存
-            cacheBytes.clear();
             throw new VerifyFailedException("协议验证失败，详细错误：" + e.getMessage() + "接收到的协议：" + protocol.getProtocolStr(), e.getCause());
         } catch (Exception e) {
             LogUtil.e(TAG, "parseData error " + e.getMessage());
-            cacheBytes.clear();
             throw new Exception("详细错误：" + e.getMessage() + "接收到的协议：" + protocol.getProtocolStr(), e.getCause());
         }
     }
@@ -98,12 +97,5 @@ public class BytesToIProtocol extends ByteToMessageCodec<IProtocol> {
 
     public void setParseSerialProtocol(IParseSerialProtocol parseSerialProtocol) {
         this.parseSerialProtocol = parseSerialProtocol;
-    }
-
-    /**
-     * 清空数据缓存
-     */
-    public void clearCache() {
-        cacheBytes.clear();
     }
 }

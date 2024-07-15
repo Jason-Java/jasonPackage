@@ -35,8 +35,6 @@ public class ReadTimeoutHandler extends ChannelDuplexHandler {
                 ctx.channel().close();
                 if (this.listener != null) {
                     BytesToIProtocol handler = (BytesToIProtocol) ctx.pipeline().get(BytesToIProtocol.TAG);
-                    // 清空协议转换中的缓存
-                    handler.clearCache();
                     listener.error("读取超时");
                 }
             }
