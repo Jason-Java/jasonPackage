@@ -5,8 +5,6 @@ import com.jason.jasontools.util.LogUtil;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * <p>
@@ -27,7 +25,7 @@ public abstract class DeviceSerialPort {
      */
     private IResultListener resultListener;
 
-    private IVerifySerialProtocolData verifySerialProtocolData = null;
+    private AbsVerifySerialProtocolData verifySerialProtocolData = null;
     private IParseSerialProtocol parseSerialProtocolData = null;
 
 //    private ArrayList<Byte> cacheBytes = new ArrayList<>();
@@ -125,7 +123,7 @@ public abstract class DeviceSerialPort {
      *
      * @param verifySerialProtocolData 校验数据的接口
      */
-    public void setVerifySerialProtocolData(IVerifySerialProtocolData verifySerialProtocolData) {
+    public void setVerifySerialProtocolData(AbsVerifySerialProtocolData verifySerialProtocolData) {
         this.verifySerialProtocolData = verifySerialProtocolData;
     }
 
@@ -142,7 +140,7 @@ public abstract class DeviceSerialPort {
     /**
      * 发送数据<br/>
      * 在发送数据之前如果{@link  #verifySerialProtocolData}不为空
-     * 则会调用{@link IVerifySerialProtocolData#verifySendData(IProtocol, int)} 的方法进行校验数据
+     * 则会调用{@link AbsVerifySerialProtocolData#verifySendData(IProtocol, int)} 的方法进行校验数据
      * 校验数据规则由用户自行决定
      *
      * @param protocol 协议

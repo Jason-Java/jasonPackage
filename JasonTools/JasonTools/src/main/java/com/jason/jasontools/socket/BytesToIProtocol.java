@@ -2,13 +2,11 @@ package com.jason.jasontools.socket;
 
 import com.jason.jasontools.commandbus.IProtocol;
 import com.jason.jasontools.serialport.IParseSerialProtocol;
-import com.jason.jasontools.serialport.IVerifySerialProtocolData;
+import com.jason.jasontools.serialport.AbsVerifySerialProtocolData;
 import com.jason.jasontools.serialport.ResultData;
 import com.jason.jasontools.serialport.VerifyFailedException;
 import com.jason.jasontools.util.LogUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
@@ -30,13 +28,13 @@ public class BytesToIProtocol extends ByteToMessageCodec<IProtocol> {
     /**
      * 验证协议是否有效
      */
-    private IVerifySerialProtocolData verifySerialProtocolData;
+    private AbsVerifySerialProtocolData verifySerialProtocolData;
     /**
      * 处理返回协议
      */
     private IParseSerialProtocol parseSerialProtocol;
 
-    public BytesToIProtocol(IVerifySerialProtocolData verifySerialProtocolData, IParseSerialProtocol parseSerialProtocol) {
+    public BytesToIProtocol(AbsVerifySerialProtocolData verifySerialProtocolData, IParseSerialProtocol parseSerialProtocol) {
         this.verifySerialProtocolData = verifySerialProtocolData;
         this.parseSerialProtocol = parseSerialProtocol;
     }
@@ -91,7 +89,7 @@ public class BytesToIProtocol extends ByteToMessageCodec<IProtocol> {
         }
     }
 
-    public void setVerifySerialProtocolData(IVerifySerialProtocolData verifySerialProtocolData) {
+    public void setVerifySerialProtocolData(AbsVerifySerialProtocolData verifySerialProtocolData) {
         this.verifySerialProtocolData = verifySerialProtocolData;
     }
 

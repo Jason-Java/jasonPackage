@@ -2,6 +2,7 @@ package com.jason.jasonuitools;
 
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.speech.tts.TextToSpeech;
@@ -17,6 +18,8 @@ public class JasonToast {
     private View view;
     private TextView textView;
     private Handler handler;
+
+    private TextToSpeech textToSpeech;
 
     private JasonToast() {
         handler = new Handler(Looper.getMainLooper());
@@ -36,8 +39,9 @@ public class JasonToast {
         textView = view.findViewById(R.id.message);
     }
 
-    public void makeError(String message, TextToSpeech textToSpeech) {
-        speech(message, textToSpeech);
+    public void makeError(String message, boolean isSpeak) {
+        if(isSpeak)
+        speech(message,context);
         makeError(message);
     }
 
@@ -62,8 +66,9 @@ public class JasonToast {
         });
     }
 
-    public void makeSuccess(String message, TextToSpeech textToSpeech) {
-        speech(message, textToSpeech);
+    public void makeSuccess(String message, boolean isSpeak) {
+        if(isSpeak)
+        speech(message,context);
         makeSuccess(message);
     }
 
@@ -88,14 +93,17 @@ public class JasonToast {
         });
     }
 
-    private void speech(String message, TextToSpeech textToSpeech) {
+    private void speech(String message, Context context) {
         if (message == null || message.length() == 0) {
             return;
         }
         if (textToSpeech == null) {
-            return;
+            textToSpeech=new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                }
+            });
         }
         textToSpeech.speak(message, 0, null);
     }
-
 }

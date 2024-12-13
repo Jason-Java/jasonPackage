@@ -20,7 +20,10 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class CommandExecute implements Runnable {
     private String TAG = "JasonBaseCommandExecuteTag";
-    private final int QueueCapacity = 100;
+    /**
+     * 队列量，如何容量为零，则拒绝命令进入队列
+     */
+    private int QueueCapacity = 100;
     private LinkedList<AbsCommand> blockingQueue;
     //队列锁
     private final Lock lockAddQueue = new ReentrantLock();
@@ -30,19 +33,24 @@ public class CommandExecute implements Runnable {
     private final Condition conditionExecute = lockExecute.newCondition();
     private volatile boolean isRun = true;
 
-    public CommandExecute() {
-        blockingQueue = new LinkedList<AbsCommand>();
-    }
-
     public CommandExecute(String TAG) {
         blockingQueue = new LinkedList<AbsCommand>();
         this.TAG = TAG;
     }
 
 
+    /**
+     * 添加命令到发送队列，如果队列容量{@link QueueCapacity }为零则拒绝命令进入队列
+     * 根据命令的优先级，对命令进行排序，优先级序号越小，优先级越大。
+     *
+     * @param command
+     */
     public void addQueue(AbsCommand command) {
         lockAddQueue.lock();
         try {
+            if (QueueCapacity == 0) {
+                return;
+            }
             if (blockingQueue.size() >= QueueCapacity) {
                 blockingQueue.remove(0);
             }
@@ -63,6 +71,20 @@ public class CommandExecute implements Runnable {
             }
         } catch (Exception ignore) {
             LogUtil.e(TAG, "队列已满,添加线程已阻塞");
+        } finally {
+            lockAddQueue.unlock();
+        }
+    }
+
+    /**
+     * 清空队列
+     */
+    public boolean clearQueue() {
+        lockAddQueue.lock();
+        try {
+            blockingQueue.clear();
+            QueueCapacity = 0;
+            return true;
         } finally {
             lockAddQueue.unlock();
         }
@@ -119,9 +141,9 @@ public class CommandExecute implements Runnable {
                     }
                 }
             });
+
             conditionExecute.await();
         } catch (InterruptedException e) {
-
         } finally {
             lockExecute.unlock();
         }

@@ -1,10 +1,9 @@
 package com.jason.jasontools.commandbus;
 
-import com.jason.jasontools.serialport.ResultData;
 
-public interface IMessageListener {
+public interface IMessageListener<T> {
     void start();
-    void success(ResultData data);
+    void success(T data);
 
     void error(String message, int type);
 }

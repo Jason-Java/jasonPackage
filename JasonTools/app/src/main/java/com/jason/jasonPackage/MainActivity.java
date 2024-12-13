@@ -1,19 +1,18 @@
 package com.jason.jasonPackage;
 
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.view.View;
-import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
 
-import com.jason.jasonuitools.view.ShadowDrawable;
+import com.jason.jasontools.commandbus.AbsCommand;
+import com.jason.jasontools.commandbus.IMessageListener;
+import com.jason.jasontools.commandbus.IProtocol;
+import com.jason.jasontools.util.JasonThreadPool;
+import com.jason.jasontools.util.LogUtil;
 
-import java.util.concurrent.CountDownLatch;
+import bioyond_robotic.BioyondRoboticCommand;
+import bioyond_robotic.BioyondRoboticSocketClient;
+import bioyond_robotic.protocol.RoboticRetryProtocol;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -22,15 +21,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       /* Drawable drawable = new ShadowDrawable.Builder()
-                .setBgColor(Color.parseColor("#1559A0"))
-                .setShadowColor(Color.parseColor("#AA1559A0"))
-                .setShadowRadius(10)
-                .setOffsetBottom(10)
-                .setOffsetRight(-10)
-                .setRadius(50)
-                .builder();
-        viewById.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        ViewCompat.setBackground(viewById, drawable);*/
+        BioyondRoboticSocketClient.getInstance().connect("192.168.1.116", 60003, 2000);
+        //初始化命令调度中心
+        JasonThreadPool.getInstance().execute(CommendExecuteCenterSingle.getInstance());
+        findViewById(R.id.menuThree).setOnClickListener(v -> {
+
+            IProtocol protocol = new RoboticRetryProtocol();
+//            protocol = new RoboticArmPickOrPlace(1, 1, 1, 1, 1, 1);
+            AbsCommand cmd = new BioyondRoboticCommand(new IMessageListener() {
+                @Override
+                public void start() {
+                    LogUtil.i("开始发送数据");
+                }
+
+                @Override
+                public void success(Object data) {
+                    LogUtil.i("成功收到数据");
+                }
+
+                @Override
+                public void error(String message, int type) {
+                    LogUtil.e("发生错误 " + message);
+                }
+            }, protocol);
+            CommendExecuteCenterSingle.getInstance().addQueue(cmd);
+        });
     }
 }

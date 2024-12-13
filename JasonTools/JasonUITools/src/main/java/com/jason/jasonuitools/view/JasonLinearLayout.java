@@ -166,4 +166,39 @@ public class JasonLinearLayout extends LinearLayout {
             }
         }
     }
+
+    /**
+     * 设置背景色
+     * @param color
+     */
+    public void setBackground(int color) {
+        this.background = new ColorDrawable(color);
+        this.mBackground=this.background;
+        onDrawShadow();
+    }
+
+    /**
+     * 设置按压背景色
+     * @param color
+     */
+    public void setPressBackground(int color) {
+        this.pressBackground = new ColorDrawable(color);
+        this.mBackground = this.pressBackground;
+        onDrawShadow();
+    }
+
+    public void setIsSelected(boolean selected) {
+        this.selected=selected;
+        this.mBackground = background == null ? new ColorDrawable(0xffffffff) : background;
+        onDrawShadow();
+    }
+    public void setIsSelected(boolean selected,int color) {
+        setSelectedBackground(color);
+        setIsSelected(selected);
+    }
+    public void setSelectedBackground(int color){
+        this.selectedBackground = new ColorDrawable(color);
+    }
+
+
 }

@@ -3,10 +3,9 @@ package com.jason.jasontools.socket;
 import com.jason.jasontools.commandbus.IProtocol;
 import com.jason.jasontools.serialport.IParseSerialProtocol;
 import com.jason.jasontools.serialport.IResultListener;
-import com.jason.jasontools.serialport.IVerifySerialProtocolData;
+import com.jason.jasontools.serialport.AbsVerifySerialProtocolData;
 import com.jason.jasontools.util.LogUtil;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
@@ -61,7 +60,7 @@ public abstract class SocketClient {
      */
     private IResultListener listener;
 
-    private IVerifySerialProtocolData verifySerialProtocolData = null;
+    private AbsVerifySerialProtocolData verifySerialProtocolData = null;
     private IParseSerialProtocol parseSerialProtocolData = null;
 
     /**
@@ -146,8 +145,6 @@ public abstract class SocketClient {
             if (SocketClient.this.listener != null)
                 listener.error("连接超时");
             LogUtil.e(TAG, "open socket error " + e.getMessage());
-            eventLoopGroup.shutdownGracefully();
-            workEventLoopGroup.shutdownGracefully();
         }
     }
 
@@ -187,8 +184,6 @@ public abstract class SocketClient {
             }
             e.printStackTrace();
             LogUtil.e(TAG, "open socket error " + e.getMessage());
-            eventLoopGroup.shutdownGracefully();
-            workEventLoopGroup.shutdownGracefully();
         }
     }
 
@@ -215,7 +210,7 @@ public abstract class SocketClient {
      *
      * @param verifySerialProtocolData 校验数据的接口
      */
-    public void setVerifySerialProtocolData(IVerifySerialProtocolData verifySerialProtocolData) {
+    public void setVerifySerialProtocolData(AbsVerifySerialProtocolData verifySerialProtocolData) {
         this.verifySerialProtocolData = verifySerialProtocolData;
     }
 
@@ -232,7 +227,7 @@ public abstract class SocketClient {
     /**
      * 发送数据<br/>
      * 在发送数据之前如果{@link  #verifySerialProtocolData}不为空
-     * 则会调用{@link IVerifySerialProtocolData#verifySendData(IProtocol, int)} 的方法进行校验数据
+     * 则会调用{@link AbsVerifySerialProtocolData#verifySendData(IProtocol, int)} 的方法进行校验数据
      * 校验数据规则由用户自行决定
      *
      * @param protocol 协议

@@ -7,54 +7,23 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.jason.jasonuitools.view.JasonLinearLayout
-        android:layout_width="306dp"
-        android:layout_height="70dp"
-        android:orientation="vertical"
-        android:padding="8.5dp"
-        app:ja_radius="7dp"
 
-        app:ja_strokeColor="#c7d9ef"
-        app:ja_strokeWidth="1dp">
+    <com.jason.jasonuitools.view.JasonLinearLayout
+        android:id="@+id/menuThree"
+        android:layout_width="172dp"
+        android:layout_height="172dp"
+        android:layout_marginTop="15dp"
+        app:ja_gravity="center_horizontal"
+        app:ja_iconTop="8dp"
+        app:ja_radius="4.5dp"
+        app:ja_selected="true"
+        app:ja_selectedBackground="#0F4781"
+        app:ja_text="设置"
+        app:ja_textColor="#ffffff"
+        app:ja_textSize="8sp"
+        app:ja_textTop="26dp">
 
     </com.jason.jasonuitools.view.JasonLinearLayout>
-
-
-<!--    <com.jason.jasonuitools.view.JasonShadowView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        app:ja_background="#1669FF"
-        app:ja_gravity="center_vertical"
-        app:ja_radius="30dp"
-        app:ja_shadowColor="#100000"
-        app:ja_shadowRadius="10dp"
-        app:ja_text="冯家振"
-        app:ja_textColor="#123456"
-        app:ja_textLeft="5dp"
-        app:ja_textSize="30sp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="sdsd" />
-    </com.jason.jasonuitools.view.JasonShadowView>-->
-
-    <!-- <com.jason.jasonuitools.view.JasonIconButton
-         android:layout_width="300dp"
-         android:layout_height="300dp"
-         android:layout_marginLeft="10dp"
-         android:layout_marginTop="10dp"
-         app:ja_background="#1669FF"
-         app:ja_gravity="center_vertical"
-         app:ja_radius="30dp"
-         app:ja_shadowColor="#100000"
-         app:ja_shadowRadius="10dp"
-         app:ja_text="冯家振"
-         app:ja_textColor="#123456"
-         app:ja_textLeft="5dp"
-         app:ja_textSize="30sp"/>-->
 
 
 </LinearLayout>

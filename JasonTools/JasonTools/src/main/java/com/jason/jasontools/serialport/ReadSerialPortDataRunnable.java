@@ -1,7 +1,12 @@
 package com.jason.jasontools.serialport;
 
+import android.os.SystemClock;
+
 import com.jason.jasontools.util.LogUtil;
 import com.jason.jasontools.util.StrUtil;
+
+import java.io.ByteArrayInputStream;
+import java.nio.ByteBuffer;
 
 import android_serialport_api.JasonSerialPort;
 
@@ -34,13 +39,13 @@ public class ReadSerialPortDataRunnable implements Runnable {
 
     @Override
     public void run() {
+        byte[] buffer = new byte[1024];
         while (isRun) {
             try {
                 if (this.serialPort == null) {
                     LogUtil.e(TAG, "SerialPort " + serialPortName + " readData error: serialPort is null");
                     break;
                 }
-                byte[] buffer = new byte[1024];
                 int size = this.serialPort.getInputStream().read(buffer);
                 if (size > 0) {
                     byte[] data = new byte[size];
@@ -48,6 +53,8 @@ public class ReadSerialPortDataRunnable implements Runnable {
                     LogUtil.i(TAG, "SerialPort " + serialPortName + " 接受成功 [  length:  " + data.length + "  content: " + StrUtil.byteToHexString(data) + "  ]");
                     if (this.listener != null)
                         listener.onResponseData(data, data.length);
+                } else {
+                    LogUtil.i("我在读取数据");
                 }
             } catch (Exception e) {
                 LogUtil.e(TAG, "SerialPort " + serialPortName + " readData error: " + e.getMessage());
@@ -56,7 +63,6 @@ public class ReadSerialPortDataRunnable implements Runnable {
         }
         LogUtil.e(TAG, "串口读取线程异常结束");
     }
-
     /**
      * 停止读取串口数据
      */

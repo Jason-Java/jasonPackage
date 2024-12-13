@@ -47,6 +47,7 @@ public class CheckTimeOutRunnable implements Runnable {
                     command.getMessageListener().error("超时", -1);
                     command.setMessageListener(null);
                 }
+                // todo 去掉超时自动调度下一个命令
                 command.getRepeaterListener().onNext();
                 command.setRepeaterListener(null);
             }
@@ -54,6 +55,9 @@ public class CheckTimeOutRunnable implements Runnable {
         }
     }
 
+    /**
+     * 停止超时监听
+     */
     public void stopCheckTimeOutThread() {
         isCheck = false;
     }

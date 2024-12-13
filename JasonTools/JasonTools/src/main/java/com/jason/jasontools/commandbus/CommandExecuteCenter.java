@@ -46,7 +46,7 @@ public class CommandExecuteCenter implements Runnable {
     }
 
     /**
-     * 初始化
+     * 初始化队列大小
      */
     private void init() {
         queue = new LinkedList<>();
@@ -97,26 +97,42 @@ public class CommandExecuteCenter implements Runnable {
         LogUtil.i(TAG, "发送命令线程结束-------");
     }
 
-    public void getRunnable() {
+    private void getRunnable() {
         lock.lock();
-        try{
-        while (queue.size() == 0) {
-            try {
-                condition.await(10, TimeUnit.SECONDS);
-            } catch (InterruptedException e) {
+        try {
+            while (queue.size() == 0) {
+                try {
+                    condition.await(10, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                }
             }
-        }
-        AbsCommand absCommand = queue.pollFirst();
-        CommandExecute runnable = runnableMap.get(absCommand.getRunnableTAG());
-        if (runnable == null) {
-            runnable = new CommandExecute(absCommand.getRunnableTAG());
-            runnableMap.put(absCommand.getRunnableTAG(), runnable);
-            JasonThreadPool.getInstance().execute(runnable);
-        }
-        runnable.addQueue(absCommand);
-        }finally {
+            AbsCommand absCommand = queue.pollFirst();
+            CommandExecute runnable = runnableMap.get(absCommand.getRunnableTAG());
+            if (runnable == null) {
+                runnable = new CommandExecute(absCommand.getRunnableTAG());
+                runnableMap.put(absCommand.getRunnableTAG(), runnable);
+                JasonThreadPool.getInstance().execute(runnable);
+            }
+            runnable.addQueue(absCommand);
+        } finally {
             lock.unlock();
         }
+    }
+
+    /**
+     * 获取当前命令的实际调度者
+     *
+     * @param tag
+     * @return
+     */
+    public CommandExecute getCommandExecute(String tag) {
+        lock.lock();
+        try {
+            return runnableMap.get(tag);
+        } finally {
+            lock.unlock();
+        }
+
     }
 
     //停止线程

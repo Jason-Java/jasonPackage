@@ -1,5 +1,7 @@
 package com.jason.jasontools.util;
 
+import android.media.tv.TvView;
+
 import androidx.annotation.NonNull;
 
 import java.util.regex.Matcher;
@@ -288,6 +290,15 @@ public class StrUtil {
         }
     }
 
+    public final static String toLowerCaseFirst(String val) {
+        if (isEmpty(val)) {
+            return val;
+        }
+        char c = val.charAt(0);
+        c = (char) (c + 32);
+        return c + val.substring(1, val.length());
+    }
+
 
     /**
      * 数值进行四舍五入,小数值必须大于等于一位
@@ -326,6 +337,27 @@ public class StrUtil {
             }
         }
         return integerPart + "." + decimalPart;
+    }
+
+    /**
+     * 补全位数
+     * 补全4位     1---》   0001
+     * 补全三位     12---》  012
+     *
+     * @param number 实际的数字
+     * @param bit    补全到多少位
+     * @return
+     */
+    public static String completeInteger(int number, int bit) {
+        String value = String.valueOf(number);
+        if (value.length() >= bit) {
+            return value;
+        }
+        int dif = bit - value.length();
+        for (int i = 0; i < dif; i++) {
+            value = "0" + value;
+        }
+        return value;
     }
 
 

@@ -161,22 +161,26 @@ public class JasonIconButton extends View {
     }
 
 
+
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (selected) {
+            return super.onTouchEvent(event);
+        }
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (pressBackground != null) {
                     mBackground = pressBackground;
                 }
-                invalidate();
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 mBackground = background;
-                invalidate();
                 break;
         }
+        invalidate();
         return super.onTouchEvent(event);
     }
 
@@ -241,7 +245,9 @@ public class JasonIconButton extends View {
      */
     private void drawBackGround(Canvas canvas) {
         if (selected) {
-            mBackground = selectedBackground;
+            this.mBackground = selectedBackground;
+        }else{
+            this.mBackground=this.background;
         }
         if (mBackground != null) {
             int width = getMeasuredWidth();
@@ -545,7 +551,7 @@ public class JasonIconButton extends View {
     }
 
     public void setJaBackground(Drawable background) {
-        this.background = background;
+        this.mBackground = background;
         invalidate();
     }
 

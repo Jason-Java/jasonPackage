@@ -66,11 +66,11 @@ public abstract class AbsCommand {
             startCheckTimeoutThread();
         }
         // 如果有重发机制，第一次发送命令的时候才调用 start()函数
-        if (getRepeater() && repeatCount == 0) {
+        if (getRepeater() && repeatCount == 0 && messageListener != null) {
             messageListener.start();
         }
         // 如果没有重发机制，则调用start()
-        else {
+        else if (messageListener != null) {
             messageListener.start();
         }
         execute();
@@ -125,7 +125,7 @@ public abstract class AbsCommand {
 
 
     /**
-     * 获取命令重复执行的次数
+     * 获取命令已经重复执行的次数
      *
      * @return
      */
@@ -134,7 +134,7 @@ public abstract class AbsCommand {
     }
 
     /**
-     * 设置命令重复执行的次数
+     * 设置命令已经重复执行的次数
      *
      * @param repeatCount
      */
