@@ -1,7 +1,9 @@
 package com.jason.jasontools.commandbus;
 
 
+import com.jason.jasontools.serialport.IResultListener;
 import com.jason.jasontools.util.JasonThreadPool;
+import com.jason.jasontools.util.LogUtil;
 
 /**
  * <p>
@@ -43,10 +45,12 @@ public abstract class AbsCommand {
      * 检查超时线程
      */
     private CheckTimeOutRunnable checkTimeOutRunnable;
+    protected IProtocol iProtocol;
 
 
-    public AbsCommand(IMessageListener messageListener) {
+    public AbsCommand(IMessageListener messageListener, IProtocol iProtocol) {
         this.messageListener = messageListener;
+        this.iProtocol = iProtocol;
     }
 
     /**
@@ -84,6 +88,7 @@ public abstract class AbsCommand {
      */
     protected abstract void execute();
 
+    // 开启超时检查线程
     private void startCheckTimeoutThread() {
         JasonThreadPool.getInstance().execute(this.checkTimeOutRunnable = new CheckTimeOutRunnable(this));
     }
@@ -95,6 +100,20 @@ public abstract class AbsCommand {
      */
     public void stopCheckTimeOutThread() {
         this.checkTimeOutRunnable.stopCheckTimeOutThread();
+    }
+
+    /**
+     * 命令发送之后，等待接收回复数据发生超时现象
+     * 判断是否需要重发此命令
+     * 默认命令重发三次，在命令重发期间超时现象不需要通知用户，仅在最后一次超时情况下进行通知
+     */
+    public void timeoutOccurs() {
+        if (this.getRepeater() && this.repeatCount < 2) {
+            ++this.repeatCount;
+            this.repeaterListener.onRepeatCommand();
+        } else {
+            getResultListener().error("超时");
+        }
     }
 
     /**
@@ -123,24 +142,6 @@ public abstract class AbsCommand {
         this.priority = priority;
     }
 
-
-    /**
-     * 获取命令已经重复执行的次数
-     *
-     * @return
-     */
-    public int getRepeatCount() {
-        return repeatCount;
-    }
-
-    /**
-     * 设置命令已经重复执行的次数
-     *
-     * @param repeatCount
-     */
-    public void setRepeatCount(int repeatCount) {
-        this.repeatCount = repeatCount;
-    }
 
     /**
      * 获取命令超时时间最大时间
@@ -201,7 +202,8 @@ public abstract class AbsCommand {
         this.messageListener = messageListener;
     }
 
-    public String getRunnableTAG() {
-        return "DefaultRunnable";
-    }
+    protected abstract IResultListener getResultListener();
+
+    // 获取命令的名称
+    protected abstract String getCommandName();
 }

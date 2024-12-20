@@ -107,10 +107,10 @@ public class CommandExecuteCenter implements Runnable {
                 }
             }
             AbsCommand absCommand = queue.pollFirst();
-            CommandExecute runnable = runnableMap.get(absCommand.getRunnableTAG());
+            CommandExecute runnable = runnableMap.get(absCommand.getCommandName());
             if (runnable == null) {
-                runnable = new CommandExecute(absCommand.getRunnableTAG());
-                runnableMap.put(absCommand.getRunnableTAG(), runnable);
+                runnable = new CommandExecute(absCommand.getCommandName());
+                runnableMap.put(absCommand.getCommandName(), runnable);
                 JasonThreadPool.getInstance().execute(runnable);
             }
             runnable.addQueue(absCommand);
@@ -122,13 +122,13 @@ public class CommandExecuteCenter implements Runnable {
     /**
      * 获取当前命令的实际调度者
      *
-     * @param tag
+     * @param  commandName
      * @return
      */
-    public CommandExecute getCommandExecute(String tag) {
+    public CommandExecute getCommandExecute(String commandName) {
         lock.lock();
         try {
-            return runnableMap.get(tag);
+            return runnableMap.get(commandName);
         } finally {
             lock.unlock();
         }

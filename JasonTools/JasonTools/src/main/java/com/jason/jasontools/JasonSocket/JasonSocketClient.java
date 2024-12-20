@@ -1,16 +1,10 @@
 package com.jason.jasontools.JasonSocket;
 
-import com.jason.jasontools.commandbus.IProtocol;
-import com.jason.jasontools.serialport.AbsVerifySerialProtocolData;
-import com.jason.jasontools.serialport.IParseSerialProtocol;
-import com.jason.jasontools.serialport.VerifyFailedException;
-import com.jason.jasontools.util.JasonThreadPool;
 import com.jason.jasontools.util.LogUtil;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 /**
  * <p>

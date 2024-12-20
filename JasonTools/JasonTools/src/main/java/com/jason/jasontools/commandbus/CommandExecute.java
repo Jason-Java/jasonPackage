@@ -83,7 +83,6 @@ public class CommandExecute implements Runnable {
         lockAddQueue.lock();
         try {
             blockingQueue.clear();
-            QueueCapacity = 0;
             return true;
         } finally {
             lockAddQueue.unlock();

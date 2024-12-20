@@ -8,6 +8,11 @@
     tools:context=".MainActivity">
 
 
+    <Button
+        android:id="@+id/testCmd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <com.jason.jasonuitools.view.JasonLinearLayout
         android:id="@+id/menuThree"
         android:layout_width="172dp"

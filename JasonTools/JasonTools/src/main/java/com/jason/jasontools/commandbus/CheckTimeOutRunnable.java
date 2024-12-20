@@ -36,21 +36,7 @@ public class CheckTimeOutRunnable implements Runnable {
                     break;
                 }
             }
-            //超时
-            //判断此命令是否需要重发
-            //重命令最多重发三次,在重发命令期间不需要通知用户超时
-            if (command.getRepeater() && command.getRepeatCount() < 2) {
-                command.setRepeatCount(command.getRepeatCount() + 1);
-                command.getRepeaterListener().onRepeatCommand();
-            } else {
-                if (command.getMessageListener() != null) {
-                    command.getMessageListener().error("超时", -1);
-                    command.setMessageListener(null);
-                }
-                // todo 去掉超时自动调度下一个命令
-                command.getRepeaterListener().onNext();
-                command.setRepeaterListener(null);
-            }
+            command.timeoutOccurs();
             break;
         }
     }

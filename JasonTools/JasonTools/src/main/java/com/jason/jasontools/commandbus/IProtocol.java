@@ -87,10 +87,4 @@ public class IProtocol {
         return protocol == null ? 0 : protocol.length;
     }
 
-    @Override
-    public Object clone() {
-        IProtocol o = new IProtocol();
-        o.setProtocol(this.getProtocol());
-        return o;
-    }
 }

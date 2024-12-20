@@ -5,6 +5,7 @@ import com.jason.jasontools.commandbus.IMessageListener;
 import com.jason.jasontools.commandbus.IProtocol;
 import com.jason.jasontools.serialport.IResultListener;
 import com.jason.jasontools.serialport.ResultData;
+import com.jason.jasontools.util.LogUtil;
 
 /**
  * <p>
@@ -27,7 +28,13 @@ public class BioyondRoboticCommand extends AbsCommand {
     @Override
     protected void execute() {
         BioyondRoboticSocketClient socketClient = BioyondRoboticSocketClient.getInstance();
-        IResultListener<ResultData<String>> resultListener = new IResultListener<ResultData<String>>() {
+        socketClient.getReceiver().setResultListener(getResultListener());
+        socketClient.getSender().setResultListener(getResultListener()).sendData(protocol);
+    }
+
+    @Override
+    protected IResultListener<ResultData<String>> getResultListener() {
+        return new IResultListener<ResultData<String>>() {
             @Override
             public void onResult(ResultData<String> protocol) {
                 // 停止线程检测
@@ -58,8 +65,6 @@ public class BioyondRoboticCommand extends AbsCommand {
                 setMessageListener(null);
             }
         };
-        socketClient.getReceiver().setResultListener(resultListener);
-        socketClient.getSender().setResultListener(resultListener).sendData(protocol);
     }
 
     @Override
@@ -67,4 +72,8 @@ public class BioyondRoboticCommand extends AbsCommand {
         return false;
     }
 
+    @Override
+    protected String getCommandName() {
+        return "机械臂命令";
+    }
 }
