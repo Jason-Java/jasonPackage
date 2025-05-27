@@ -2,6 +2,7 @@ package com.jason.jasontools.commandbus;
 
 
 import com.jason.jasontools.serialport.IResultListener;
+import com.jason.jasontools.util.EErrorNumber;
 import com.jason.jasontools.util.JasonThreadPool;
 import com.jason.jasontools.util.LogUtil;
 
@@ -66,9 +67,6 @@ public abstract class AbsCommand {
         if (listener == null) {
             throw new RuntimeException("重发机制监听器不可为空");
         }
-        if (isStartCheckTimeOutThread()) {
-            startCheckTimeoutThread();
-        }
         // 如果有重发机制，第一次发送命令的时候才调用 start()函数
         if (getRepeater() && repeatCount == 0 && messageListener != null) {
             messageListener.start();
@@ -77,7 +75,18 @@ public abstract class AbsCommand {
         else if (messageListener != null) {
             messageListener.start();
         }
-        execute();
+        JasonThreadPool.getInstance().execute(new Runnable() {
+            @Override
+            public void run() {
+                // 是否需要开启超时检查线程
+                if (isStartCheckTimeOutThread()) {
+                    startCheckTimeoutThread();
+                }
+                if (execute()) {
+                    sendData();
+                }
+            }
+        });
     }
 
     /**
@@ -86,7 +95,9 @@ public abstract class AbsCommand {
      * 2.在此方法中给命令的消费者发送命令<br/>
      * 3.如果开启了超时检查机制需要需要在消费者回调函数中调{@link #stopCheckTimeOutThread()}方法停止超时检查线程
      */
-    protected abstract void execute();
+    protected abstract boolean execute();
+
+    protected abstract void sendData();
 
     // 开启超时检查线程
     private void startCheckTimeoutThread() {
@@ -107,12 +118,13 @@ public abstract class AbsCommand {
      * 判断是否需要重发此命令
      * 默认命令重发三次，在命令重发期间超时现象不需要通知用户，仅在最后一次超时情况下进行通知
      */
-    public void timeoutOccurs() {
+    protected void timeoutOccurs(String message) {
         if (this.getRepeater() && this.repeatCount < 2) {
             ++this.repeatCount;
             this.repeaterListener.onRepeatCommand();
+            startCheckTimeoutThread();
         } else {
-            getResultListener().error("超时");
+            getResultListener().error(message, EErrorNumber.READTIMEOUT.getCode());
         }
     }
 

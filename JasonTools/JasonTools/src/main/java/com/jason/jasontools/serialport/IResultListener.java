@@ -18,7 +18,7 @@ public abstract class IResultListener<T> {
 
     public abstract void onResult(T protocol);
 
-    public void error(String msg) {
+    public void error(String msg,int errorCode) {
         LogUtil.e(TAG, "SerialPort " + getTAG() + " error: " + msg);
     }
 

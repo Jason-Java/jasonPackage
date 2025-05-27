@@ -36,13 +36,9 @@ public class JasonSocketClient {
      * @param timeOut 连接超时时间
      * @throws IOException
      */
-    public JasonSocketClient connect(int timeOut) {
-        try {
-            socket.connect(new InetSocketAddress(ip, protocol), timeOut);
-        } catch (IOException e) {
-            this.close();
-            throw new RuntimeException(e);
-        }
+    public JasonSocketClient connect(int timeOut) throws IOException {
+        socket.connect(new InetSocketAddress(ip, protocol), timeOut);
+        LogUtil.i("JasonSocket连接成功 " + ip + ":" + protocol);
         return this;
     }
 
@@ -57,23 +53,15 @@ public class JasonSocketClient {
      */
     public void close() {
         try {
-            if (socket != null) {
+            if (socket != null && socket.isConnected() && !socket.isClosed()) {
                 socket.getInputStream().close();
                 socket.getOutputStream().close();
+                socket.close();
             }
         } catch (IOException e) {
             LogUtil.e("数据流关闭异常 " + e.getMessage());
         } finally {
-            if (socket != null && socket.isConnected() && !socket.isClosed()) {
-                try {
-                    socket.close();
-                    socket = null;
-                } catch (IOException e) {
-                    LogUtil.i("socket 关闭异常  " + e.getMessage());
-                }
-            } else {
-                socket = null;
-            }
+            socket = null;
         }
         // 定时发送心跳包
     }

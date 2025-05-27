@@ -4,6 +4,7 @@ import com.jason.jasontools.commandbus.IProtocol;
 import com.jason.jasontools.serialport.IParseSerialProtocol;
 import com.jason.jasontools.serialport.IResultListener;
 import com.jason.jasontools.serialport.AbsVerifySerialProtocolData;
+import com.jason.jasontools.util.EErrorNumber;
 import com.jason.jasontools.util.LogUtil;
 
 import java.net.InetSocketAddress;
@@ -72,45 +73,18 @@ public abstract class SocketClient {
         return this.ipAddress;
     }
 
-    /**
-     * 连接超时时间 单位秒
-     */
-    private long linkTimeout;
-    /**
-     * 读取超时时间 单位秒
-     */
-    private long readTimeout;
-
-
-    public void setLinkTimeout(long linkTimeout) {
-        this.linkTimeout = linkTimeout;
-    }
-
-    public void setReadTimeout(long readTimeout) {
-        this.readTimeout = readTimeout;
-    }
-
-    public void initSocketClient() {
-        initSocketClient(linkTimeout, readTimeout);
-    }
 
     /**
      * 初始化socket客户端
      */
-    public void initSocketClient(long linkTimeout, long readTimeout) {
-        if (linkTimeout == 0) {
-            linkTimeout = 5;
-        }
-        if (readTimeout == 0) {
-            readTimeout = 3;
-        }
+    public void initSocketClient(int linkTimeout, final long readTimeout) {
         try {
             eventLoopGroup = new NioEventLoopGroup();
             workEventLoopGroup = new DefaultEventLoop();
             bootstrap = new Bootstrap()
                     .group(eventLoopGroup)
                     // 连接超时500毫秒
-                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5 * 1000)
+                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, linkTimeout == 0 ? 3000 : linkTimeout)
                     .channel(NioSocketChannel.class)
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
@@ -118,7 +92,7 @@ public abstract class SocketClient {
                             // 添加netty日志
                             ch.pipeline().addLast(new LoggingHandler(LogLevel.INFO));
                             //添加读空闲5秒超时处理器
-                            ch.pipeline().addLast(new IdleStateHandler(3, 0, 0, TimeUnit.SECONDS));
+                            ch.pipeline().addLast(new IdleStateHandler(readTimeout <= 0 ? 5000 : readTimeout, 0, 0, TimeUnit.MILLISECONDS));
                             // 添加读超时异常处理器
                             ch.pipeline().addLast(new ReadTimeoutHandler(listener));
                             // 添加协议处理转换处理类
@@ -135,7 +109,7 @@ public abstract class SocketClient {
                                 public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
                                     super.exceptionCaught(ctx, cause);
                                     if (SocketClient.this.listener != null)
-                                        listener.error(cause.getMessage());
+                                        listener.error(cause.getMessage(),EErrorNumber.UNDEFINED.getCode());
                                 }
                             });
                         }
@@ -143,7 +117,7 @@ public abstract class SocketClient {
         } catch (Exception e) {
             e.printStackTrace();
             if (SocketClient.this.listener != null)
-                listener.error("连接超时");
+                listener.error("连接超时", EErrorNumber.LINKTIMEOUT.getCode());
             LogUtil.e(TAG, "open socket error " + e.getMessage());
         }
     }
@@ -151,7 +125,7 @@ public abstract class SocketClient {
     /**
      * 打开串口接收器
      */
-    public void connect() {
+    public void connect() throws Exception {
         if (nioSocketChannel == null || !nioSocketChannel.isActive())
             this.connect(this.getIpAddress());
     }
@@ -171,20 +145,12 @@ public abstract class SocketClient {
      *
      * @param ipAddress ip地址
      */
-    public void connect(String ipAddress) {
+    public void connect(String ipAddress) throws Exception {
         this.ipAddress = ipAddress;
         String ipAndProtocol[] = this.ipAddress.split(":");
-        try {
-            nioSocketChannel = (NioSocketChannel) bootstrap
-                    .connect(new InetSocketAddress(ipAndProtocol[0], Integer.parseInt(ipAndProtocol[1])))
-                    .sync().channel();
-        } catch (Exception e) {
-            if (this.listener != null) {
-                this.listener.error("连接超时");
-            }
-            e.printStackTrace();
-            LogUtil.e(TAG, "open socket error " + e.getMessage());
-        }
+        nioSocketChannel = (NioSocketChannel) bootstrap
+                .connect(new InetSocketAddress(ipAndProtocol[0], Integer.parseInt(ipAndProtocol[1])))
+                .sync().channel();
     }
 
 
@@ -234,6 +200,11 @@ public abstract class SocketClient {
      */
     public void sendData(IProtocol protocol) {
         if (nioSocketChannel != null) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             //清除缓存
             nioSocketChannel.writeAndFlush(protocol);
         }

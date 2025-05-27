@@ -6,6 +6,7 @@ import com.jason.jasontools.serialport.IParseSerialProtocol;
 import com.jason.jasontools.serialport.IResultListener;
 import com.jason.jasontools.serialport.ResultData;
 import com.jason.jasontools.serialport.VerifyFailedException;
+import com.jason.jasontools.util.EErrorNumber;
 import com.jason.jasontools.util.LogUtil;
 import com.jason.jasontools.util.StrUtil;
 
@@ -73,8 +74,9 @@ public class JasonSocketReceiver implements Runnable {
 
     @Override
     public void run() {
-        if (resultListener == null) {
-            LogUtil.i("监听器为空，客户监听不到远程发过来的数据");
+        if (jasonSocketClient == null) {
+            LogUtil.e("Jason", "JasonSocketClient  is null");
+            return;
         }
         if (this.jasonSocketClient.getSocket() == null) {
             LogUtil.e("Jason", "Socket  is null");
@@ -146,10 +148,10 @@ public class JasonSocketReceiver implements Runnable {
             }
         } catch (VerifyFailedException e) {
             LogUtil.e(TAG, "verifyData error " + e.getMessage());
-            resultListener.error("协议验证失败，详细错误：" + e.getMessage() + "接收到的协议：" + protocol.getProtocolStr());
+            resultListener.error("协议验证失败，详细错误：" + e.getMessage() + "接收到的协议：" + protocol.getProtocolStr(), EErrorNumber.AUTHFAILED.getCode());
         } catch (Exception e) {
             LogUtil.e(TAG, "parseData error " + e.getMessage());
-            resultListener.error("详细错误：" + e.getMessage() + "接收到的协议：" + protocol.getProtocolStr());
+            resultListener.error("详细错误：" + e.getMessage() + "接收到的协议：" + protocol.getProtocolStr(),EErrorNumber.AUTHFAILED.getCode());
         }
     }
 

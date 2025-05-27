@@ -1,6 +1,7 @@
 package com.jason.jasontools.socket;
 
 import com.jason.jasontools.serialport.IResultListener;
+import com.jason.jasontools.util.EErrorNumber;
 import com.jason.jasontools.util.LogUtil;
 
 import io.netty.channel.ChannelDuplexHandler;
@@ -35,7 +36,7 @@ public class ReadTimeoutHandler extends ChannelDuplexHandler {
                 ctx.channel().close();
                 if (this.listener != null) {
                     BytesToIProtocol handler = (BytesToIProtocol) ctx.pipeline().get(BytesToIProtocol.TAG);
-                    listener.error("读取超时");
+                    listener.error("读取超时", EErrorNumber.READTIMEOUT.getCode());
                 }
             }
         }

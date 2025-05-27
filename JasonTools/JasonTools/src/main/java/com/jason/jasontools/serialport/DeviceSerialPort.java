@@ -1,6 +1,7 @@
 package com.jason.jasontools.serialport;
 
 import com.jason.jasontools.commandbus.IProtocol;
+import com.jason.jasontools.util.EErrorNumber;
 import com.jason.jasontools.util.LogUtil;
 
 import java.io.IOException;
@@ -154,16 +155,16 @@ public abstract class DeviceSerialPort {
         } catch (VerifyFailedException e) {
             LogUtil.e(TAG, "协议验证失败，详细错误：\"+e.getMessage()+\" 发送的协议：\" + protocol.getProtocolStr()");
             if (resultListener != null) {
-                resultListener.error("协议验证失败，详细错误：" + e.getMessage() + " 发送的协议：" + protocol.getProtocolStr());
+                resultListener.error("协议验证失败，详细错误：" + e.getMessage() + " 发送的协议：" + protocol.getProtocolStr(), EErrorNumber.AUTHFAILED.getCode());
             }
         } catch (IOException e) {
             LogUtil.e(TAG, "发送数据失败，IO流错误");
             if (resultListener != null)
-                resultListener.error("发送数据失败，IO流错误");
+                resultListener.error("发送数据失败，IO流错误", EErrorNumber.WRITETIMEOUT.getCode());
         } catch (NullPointerException e) {
             LogUtil.e(TAG, "串口未打开");
             if (resultListener != null)
-                resultListener.error("串口未打开");
+                resultListener.error("串口未打开", EErrorNumber.NULLPOINTER.getCode());
         }
     }
 
@@ -208,10 +209,10 @@ public abstract class DeviceSerialPort {
                     }
                 } catch (VerifyFailedException e) {
                     LogUtil.e(TAG, "verifyData error " + e.getMessage());
-                    resultListener.error("协议验证失败，详细错误：" + e.getMessage() + "接收到的协议：" + protocol.getProtocolStr());
+                    resultListener.error("协议验证失败，详细错误：" + e.getMessage() + "接收到的协议：" + protocol.getProtocolStr(), EErrorNumber.AUTHFAILED.getCode());
                 } catch (Exception e) {
                     LogUtil.e(TAG, "parseData error " + e.getMessage());
-                    resultListener.error("详细错误：" + e.getMessage() + "接收到的协议：" + protocol.getProtocolStr());
+                    resultListener.error("详细错误：" + e.getMessage() + "接收到的协议：" + protocol.getProtocolStr(), EErrorNumber.AUTHFAILED.getCode());
                 }
             }
         };

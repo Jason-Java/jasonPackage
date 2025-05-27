@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
  * @email fjz19971129@163.com
  * @createTime 2024年03月27日
  */
-public class BaseActivity extends AppCompatActivity {
+public   class BaseActivity extends AppCompatActivity {
     private CountDownTimer timer;
     /**
      * 倒计时时长

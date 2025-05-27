@@ -36,7 +36,7 @@ public class CheckTimeOutRunnable implements Runnable {
                     break;
                 }
             }
-            command.timeoutOccurs();
+            command.timeoutOccurs("读取数据超时");
             break;
         }
     }

@@ -126,7 +126,8 @@ public class CommandExecute implements Runnable {
             command.execute(new RepeaterListener() {
                 @Override
                 public void onRepeatCommand() {
-                    command.execute(this);
+                    command.sendData();
+                    //command.execute(this);
                 }
 
                 @Override
