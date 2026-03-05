@@ -2,7 +2,7 @@
 
 /* uint32_t subtraction handles HAL_GetTick() wrap-around. */
 static uint32_t stm32_button_elapsed(uint32_t now_ms, uint32_t last_ms) {
-    return (uint32_t)(now_ms - last_ms);
+    return now_ms - last_ms;
 }
 
 void stm32_button_init(stm32_button_t *button,
