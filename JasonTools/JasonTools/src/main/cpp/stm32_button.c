@@ -11,15 +11,27 @@ void stm32_button_init(stm32_button_t *button,
                        GPIO_PinState active_state,
                        uint32_t debounce_ms,
                        uint32_t long_press_ms) {
+    GPIO_PinState inactive_state;
+
     if (button == NULL) {
         return;
     }
+
+    inactive_state = active_state == GPIO_PIN_SET ? GPIO_PIN_RESET : GPIO_PIN_SET;
 
     button->port = port;
     button->pin = pin;
     button->active_state = active_state;
     button->debounce_ms = debounce_ms;
     button->long_press_ms = long_press_ms;
+    if (port == NULL) {
+        button->stable_state = inactive_state;
+        button->last_read_state = inactive_state;
+        button->last_transition_ms = HAL_GetTick();
+        button->pressed_ms = button->last_transition_ms;
+        button->long_press_reported = 0;
+        return;
+    }
     button->stable_state = HAL_GPIO_ReadPin(port, pin);
     button->last_read_state = button->stable_state;
     button->last_transition_ms = HAL_GetTick();
@@ -31,7 +43,7 @@ stm32_button_event_t stm32_button_update(stm32_button_t *button) {
     GPIO_PinState read_state;
     uint32_t now_ms;
 
-    if (button == NULL) {
+    if (button == NULL || button->port == NULL) {
         return STM32_BUTTON_EVENT_NONE;
     }
 
@@ -66,7 +78,7 @@ stm32_button_event_t stm32_button_update(stm32_button_t *button) {
 }
 
 uint8_t stm32_button_is_pressed(const stm32_button_t *button) {
-    if (button == NULL) {
+    if (button == NULL || button->port == NULL) {
         return 0;
     }
 
