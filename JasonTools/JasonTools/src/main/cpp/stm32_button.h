@@ -13,7 +13,7 @@ extern "C" {
 #include STM32_BUTTON_HAL_HEADER
 #include <stdint.h>
 
-/* Call stm32_button_update() periodically (e.g. every 1-10ms or 2-5x faster than debounce_ms). */
+/* Call stm32_button_update() every 1-10ms for optimal debounced events. */
 typedef enum {
     STM32_BUTTON_EVENT_NONE = 0,
     STM32_BUTTON_EVENT_PRESSED,
@@ -34,6 +34,7 @@ typedef struct {
     uint8_t long_press_reported;
 } stm32_button_t;
 
+/* Passing NULL is safe; the helpers become no-ops or return inactive state. */
 void stm32_button_init(stm32_button_t *button,
                        GPIO_TypeDef *port,
                        uint16_t pin,
