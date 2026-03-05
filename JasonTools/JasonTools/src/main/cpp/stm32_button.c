@@ -1,7 +1,7 @@
 #include "stm32_button.h"
 
 /* uint32_t subtraction handles HAL_GetTick() wrap-around. */
-static uint32_t stm32_button_elapsed(uint32_t now_ms, uint32_t last_ms) {
+static uint32_t stm32_button_elapsed_ms(uint32_t now_ms, uint32_t last_ms) {
     return now_ms - last_ms;
 }
 
@@ -53,7 +53,7 @@ stm32_button_event_t stm32_button_update(stm32_button_t *button) {
     }
 
     if (read_state != button->stable_state &&
-        stm32_button_elapsed(now_ms, button->last_transition_ms) >= button->debounce_ms) {
+        stm32_button_elapsed_ms(now_ms, button->last_transition_ms) >= button->debounce_ms) {
         button->stable_state = read_state;
         if (read_state == button->active_state) {
             button->pressed_ms = now_ms;
@@ -66,7 +66,7 @@ stm32_button_event_t stm32_button_update(stm32_button_t *button) {
     if (button->stable_state == button->active_state &&
         button->long_press_ms > 0 &&
         !button->long_press_reported &&
-        stm32_button_elapsed(now_ms, button->pressed_ms) >= button->long_press_ms) {
+        stm32_button_elapsed_ms(now_ms, button->pressed_ms) >= button->long_press_ms) {
         button->long_press_reported = 1;
         return STM32_BUTTON_EVENT_LONG_PRESSED;
     }
