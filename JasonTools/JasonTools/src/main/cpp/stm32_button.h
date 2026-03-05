@@ -13,7 +13,7 @@ extern "C" {
 #include STM32_BUTTON_HAL_HEADER
 #include <stdint.h>
 
-/* Call stm32_button_update() periodically (faster than debounce_ms) for debounced events. */
+/* Call stm32_button_update() periodically (e.g. every 1-10ms or 2-5x faster than debounce_ms). */
 typedef enum {
     STM32_BUTTON_EVENT_NONE = 0,
     STM32_BUTTON_EVENT_PRESSED,

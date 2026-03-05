@@ -23,7 +23,7 @@ void stm32_button_init(stm32_button_t *button,
     button->stable_state = HAL_GPIO_ReadPin(port, pin);
     button->last_read_state = button->stable_state;
     button->last_transition_ms = HAL_GetTick();
-    button->pressed_ms = button->stable_state == active_state ? button->last_transition_ms : 0U;
+    button->pressed_ms = button->last_transition_ms;
     button->long_press_reported = 0;
 }
 
