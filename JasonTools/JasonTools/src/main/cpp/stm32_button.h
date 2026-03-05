@@ -13,6 +13,7 @@ extern "C" {
 #include STM32_BUTTON_HAL_HEADER
 #include <stdint.h>
 
+/* Call stm32_button_update() periodically to get debounced edge events. */
 typedef enum {
     STM32_BUTTON_EVENT_NONE = 0,
     STM32_BUTTON_EVENT_PRESSED,
