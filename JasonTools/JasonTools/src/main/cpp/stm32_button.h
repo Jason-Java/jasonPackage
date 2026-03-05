@@ -13,7 +13,7 @@ extern "C" {
 #include STM32_BUTTON_HAL_HEADER
 #include <stdint.h>
 
-/* Call stm32_button_update() every 1-10ms; set debounce_ms to at least 2-3x the poll interval. */
+/* Call stm32_button_update() every 1-10ms; set debounce_ms to at least 2-3x the update interval. */
 typedef enum {
     STM32_BUTTON_EVENT_NONE = 0,
     STM32_BUTTON_EVENT_PRESSED,
