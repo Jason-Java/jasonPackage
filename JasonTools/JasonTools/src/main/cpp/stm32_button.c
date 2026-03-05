@@ -1,6 +1,6 @@
 #include "stm32_button.h"
 
-/* Unsigned subtraction handles HAL_GetTick() wrap-around via modular arithmetic (e.g. 0x1 - 0xFFFFFFFE = 3). */
+/* Unsigned subtraction handles HAL_GetTick() wrap-around (e.g. last_ms=0xFFFFFFFE, now_ms=0x1, elapsed=3). */
 static uint32_t stm32_button_elapsed_ms(uint32_t now_ms, uint32_t last_ms) {
     return now_ms - last_ms;
 }
